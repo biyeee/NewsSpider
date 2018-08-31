@@ -8,4 +8,7 @@ class NewSpider(scrapy.Spider):
     start_urls = ['https://news.sina.com.cn/']
 
     def parse(self, response):
-        print(response)
+        URL1 = response.xpath('//div[@class="main-nav"]/div/ul/li[1]/a/@href').extract()
+        Title = response.xpath('//div[@class="main-nav"]/div/ul/li/a/b/text()').extract()
+        print(URL1)
+        print(Title)
