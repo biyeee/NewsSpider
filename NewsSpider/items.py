@@ -12,6 +12,7 @@ from scrapy import Field
 class NewsspiderItem(scrapy.Item):
     News = Field()  # 新闻
     NewsUrl = Field()
+    kind = Field()
     Finance = Field()  # 财经
     Science = Field()  # 科技
     Sports = Field()  # 体育

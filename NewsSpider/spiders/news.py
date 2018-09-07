@@ -13,23 +13,25 @@ class NewSpider(scrapy.Spider):
 
     def parse(self, response):
         URL1 = response.xpath('//div[@class="main-nav"]/div/ul/li[1]/a/@href').extract()
-        # Title = response.xpath('//div[@class="main-nav"]/div/ul/li/a/b/text()').extract()
+        sub = self.sub
         for url in URL1:
-            yield Request(url, callback=self.parseList, dont_filter=True)
+            result = re.findall(r'//(.*?).sina.com.cn', url)
+            for i in sub:
+                if result == i:
+                    yield Request(url, callback=self.parse2, meta={'result': result}, dont_filter=True)  # 回调所需的url
 
-    def parseList(self, response):
+    def parse2(self, response):
+        href = response.xpath('//a[contains(@href,".shtml")]/@href').extract()
+        result = response.meta['result']
+        for i in href:
+            yield Request(i, callback=self.parse3, meta={'result': result},dont_filter=True)
+
+    def parse3(self, response):
         item = NewsspiderItem()
-        result = re.findall(r'//(.*?).sina.com.cn', response.url)
-        if result == ['news']:
-            href = response.xpath('//a[contains(@href,".shtml")]/@href').extract()
-            href2 = response.xpath('//a[contains(@href,".shtml")]/text()').extract()
-            print(href)
-            print(href2)
-            for i in range(len(href)):
-                item['NewsUrl'] = href[i]
-                item['News'] = href2[i]
-                yield item
-
-    # def parse2(self, response):
-    #     print(response)
-
+        title = response.xpath('//h1[@class="main-title"]/text()|//div[@class="page-header"]/text()|'
+                               '//h1[@id="artibodyTitle"]/text()').extract()
+        result = response.meta['result']
+        item['kind'] = result[0]
+        item['NewsUrl'] = response.url
+        item['News'] = title
+        yield item

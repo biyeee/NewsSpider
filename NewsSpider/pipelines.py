@@ -28,5 +28,5 @@ class NewsspiderPipeline(object):
         self.client.close()
 
     def process_item(self, item, spider):
-        self.db[self.collection_name1].update({'NewsUrl': item['NewsUrl']}, dict(item), True)  # 去重
+        self.db[self.collection_name1].update({'News': item['News']}, dict(item), True)  # 去重
         return item
