@@ -5,10 +5,10 @@ import re
 from NewsSpider.items import NewsspiderItem
 
 class NewSpider(scrapy.Spider):
-    name = 'news'
+    name = 'sina'
     allowed_domains = ['news.sina.com.cn']
     start_urls = ['https://news.sina.com.cn/']
-    sub = [['video'], ['news'], ['finance'], ['sports'], ['ent'], ['auto'], ['fashion'], ['edu'], ['travel'], ['games'],
+    sub = [['news'], ['finance'], ['sports'], ['ent'], ['auto'], ['fashion'], ['edu'], ['travel'], ['games'],
            ['tech']]
 
     def parse(self, response):
@@ -21,17 +21,17 @@ class NewSpider(scrapy.Spider):
                     yield Request(url, callback=self.parse2, meta={'result': result}, dont_filter=True)  # 回调所需的url
 
     def parse2(self, response):
-        href = response.xpath('//a[contains(@href,".shtml")]/@href').extract()
+        hrefs = response.xpath('//a[contains(@href,".shtml")]/@href').extract()
         result = response.meta['result']
-        for i in href:
-            yield Request(i, callback=self.parse3, meta={'result': result},dont_filter=True)
+        for href in hrefs:
+            yield Request(url=href, callback=self.parse3, meta={'result': result}, dont_filter=True)
 
     def parse3(self, response):
         item = NewsspiderItem()
         title = response.xpath('//h1[@class="main-title"]/text()|//div[@class="page-header"]/text()|'
-                               '//h1[@id="artibodyTitle"]/text()').extract()
+                               '//h1[@id="artibodyTitle"]/text()|//div[@class="new_hot_tit"]/span/text()').extract()
         result = response.meta['result']
         item['kind'] = result[0]
         item['NewsUrl'] = response.url
-        item['News'] = title
+        item['News'] = title[0]
         yield item
