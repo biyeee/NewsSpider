@@ -9,18 +9,15 @@ import scrapy
 from scrapy import Field
 
 
-class NewsspiderItem(scrapy.Item):
+class SinaspiderItem(scrapy.Item):
     News = Field()  # 新闻
-    NewsUrl = Field()
-    kind = Field()
-    Finance = Field()  # 财经
-    Science = Field()  # 科技
-    Sports = Field()  # 体育
-    Entertainment = Field()  # 娱乐
-    Cars = Field()  # 汽车
-    Fshion = Field()  # 时尚
-    Tourism = Field()  # 旅游
-    Real_estate = Field()  # 房产
-    Education = Field()  # 教育
-    Games = Field()  # 游戏
-    Food = Field()  # 美食
+    NewsUrl = Field()  # 新闻链接
+    kind = Field()  # 新闻类型
+    Origin = Field()  # 来源
+
+class SohuspiderItem(scrapy.Item):
+    News = Field()  # 新闻
+    NewsUrl = Field()  # 新闻链接
+    kind = Field()  # 新闻类型
+    Origin = Field()  # 来源
+

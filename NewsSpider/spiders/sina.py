@@ -2,7 +2,8 @@
 import scrapy
 from scrapy import Request
 import re
-from NewsSpider.items import NewsspiderItem
+from NewsSpider.items import SinaspiderItem
+
 
 class NewSpider(scrapy.Spider):
     name = 'sina'
@@ -12,9 +13,9 @@ class NewSpider(scrapy.Spider):
            ['tech']]
 
     def parse(self, response):
-        URL1 = response.xpath('//div[@class="main-nav"]/div/ul/li[1]/a/@href').extract()
+        URL = response.xpath('//div[@class="main-nav"]/div/ul/li[1]/a/@href').extract()
         sub = self.sub
-        for url in URL1:
+        for url in URL:
             result = re.findall(r'//(.*?).sina.com.cn', url)
             for i in sub:
                 if result == i:
@@ -24,14 +25,22 @@ class NewSpider(scrapy.Spider):
         hrefs = response.xpath('//a[contains(@href,".shtml")]/@href').extract()
         result = response.meta['result']
         for href in hrefs:
-            yield Request(url=href, callback=self.parse3, meta={'result': result}, dont_filter=True)
+            if href.startswith('//'):
+                href2 = 'http:' + href
+                yield Request(url=href2, callback=self.parse3, meta={'result': result}, dont_filter=True)
+            else:
+                yield Request(url=href, callback=self.parse3, meta={'result': result}, dont_filter=True)
 
     def parse3(self, response):
-        item = NewsspiderItem()
-        title = response.xpath('//h1[@class="main-title"]/text()|//div[@class="page-header"]/text()|'
-                               '//h1[@id="artibodyTitle"]/text()|//div[@class="new_hot_tit"]/span/text()').extract()
+        item = SinaspiderItem()
+        title = response.xpath('//h1[@class|id="main-title"]/text()|//div[@class="page-header"]/h1/text()|'
+                               '//h1[@id="artibodyTitle"]/text()|//div[@class="new_hot_tit"]/span/text()|'
+                               '//div[@class="article-header clearfix"]/h1/text()|'
+                               '//div[@class="breadcrumb"]/h1/text()').extract()
         result = response.meta['result']
-        item['kind'] = result[0]
-        item['NewsUrl'] = response.url
-        item['News'] = title[0]
-        yield item
+        if len(title) != 0:
+            item['kind'] = result[0]
+            item['NewsUrl'] = response.url
+            item['News'] = title[0]
+            item['Origin'] = '新浪'
+            yield item
