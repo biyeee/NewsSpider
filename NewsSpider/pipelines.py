@@ -52,6 +52,12 @@ class NewsspiderPipeline(object):
                                     (item['News'], item['NewsUrl'], item['kind'], item['Origin']))
             except:
                 pass
+        elif spider.name == "ifeng":
+            try:
+                self.cursor.execute("""insert into ifeng(News,NewsUrl,kind,Origin)values("%s","%s","%s","%s")""",
+                                    (item['News'], item['NewsUrl'], item['kind'], item['Origin']))
+            except:
+                pass
         else:
             spider.log('Undefined name:%s' % spider.name)
         return item

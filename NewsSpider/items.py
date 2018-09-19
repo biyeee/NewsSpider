@@ -21,3 +21,9 @@ class SohuspiderItem(scrapy.Item):
     kind = Field()  # 新闻类型
     Origin = Field()  # 来源
 
+class IfengspiderItem(scrapy.Item):
+    News = Field()  # 新闻
+    NewsUrl = Field()  # 新闻链接
+    kind = Field()  # 新闻类型
+    Origin = Field()  # 来源
+
