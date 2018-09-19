@@ -48,7 +48,9 @@ USER_AGENT_LIST = ['zspider/0.9-dev http://feedback.redkolibri.com/',
                     'BaiDuSpider',
                     'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0) AddSugarSpiderBot www.idealobserver.com',
                    ]
-
+DOWNLOADER_MIDDLEWARES = {
+    'NewsSpider.MidWare.HeaderMidWare.ProcessHeaderMidware': 543,
+}
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 
@@ -83,9 +85,9 @@ DEFAULT_REQUEST_HEADERS = {
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-DOWNLOADER_MIDDLEWARES = {
-   'NewsSpider.middlewares.ProxyMiddleware': 301,
-}
+# DOWNLOADER_MIDDLEWARES = {
+#    'NewsSpider.middlewares.ProxyMiddleware': 301,
+# }
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
