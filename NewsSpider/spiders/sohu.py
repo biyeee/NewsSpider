@@ -3,14 +3,16 @@ import re
 
 import scrapy
 from scrapy import Request
+from scrapy_redis.spiders import RedisSpider
 
 from NewsSpider.items import SohuspiderItem
 
 
-class SohuSpider(scrapy.Spider):
+class SohuSpider(RedisSpider):
     name = 'sohu'
-    allowed_domains = ['news.sohu.com']
-    start_urls = ['http://news.sohu.com/']
+    # allowed_domains = ['news.sohu.com']
+    # start_urls = ['http://news.sohu.com/']
+    redis_key = 'SohuSpider:start_urls'
     sub = [['news'], ['business'], ['sports'], ['yule'], ['auto'], ['fashion'], ['it'], ['travel'], ['game'],
            ['learning']]
 

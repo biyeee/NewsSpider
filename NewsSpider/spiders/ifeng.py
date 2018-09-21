@@ -3,14 +3,16 @@ import scrapy
 import re
 
 from scrapy import Request
+from scrapy_redis.spiders import RedisSpider
 
 from NewsSpider.items import IfengspiderItem
 
 
-class IfengSpider(scrapy.Spider):
+class IfengSpider(RedisSpider):
     name = 'ifeng'
-    allowed_domains = ['news.ifeng.com']
-    start_urls = ['http://news.ifeng.com/']
+    # allowed_domains = ['news.ifeng.com']
+    # start_urls = ['http://news.ifeng.com/']
+    redis_key = 'ifengSpider:start_urls'
     sub = [['news'], ['finance'], ['sports'], ['ent'], ['auto'], ['fashion'], ['tech'], ['travel'], ['games'],
            ['book']]
 

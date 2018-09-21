@@ -57,6 +57,15 @@ ROBOTSTXT_OBEY = False
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 # CONCURRENT_REQUESTS = 32
 
+
+SCHEDULER = "scrapy_redis.scheduler.Scheduler"  # 启用Redis调度存储请求队列
+SCHEDULER_PERSIST = False    # 不清除Redis队列、这样可以暂停/恢复 爬取
+DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"  # 确保所有的爬虫通过Redis去重
+SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderPriorityQueue'
+REDIS_HOST = '127.0.0.1'  # 也可以根据情况改成 localhost
+REDIS_PORT = 6379
+REDIS_URL = None
+
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs

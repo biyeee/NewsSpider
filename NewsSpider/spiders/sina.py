@@ -3,12 +3,14 @@ import scrapy
 from scrapy import Request
 import re
 from NewsSpider.items import SinaspiderItem
+from scrapy_redis.spiders import RedisSpider
 
 
-class NewSpider(scrapy.Spider):
+class NewSpider(RedisSpider):
     name = 'sina'
-    allowed_domains = ['news.sina.com.cn']
-    start_urls = ['https://news.sina.com.cn/']
+    # allowed_domains = ['news.sina.com.cn']
+    # start_urls = ['https://news.sina.com.cn/']
+    redis_key = 'NewSpider:start_urls'
     sub = [['news'], ['finance'], ['sports'], ['ent'], ['auto'], ['fashion'], ['edu'], ['travel'], ['games'],
            ['tech']]
 
